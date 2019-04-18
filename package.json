@@ -12,7 +12,10 @@
   },
   "author": "Dariusz Ustrzycki <newsecond@outlook.com> (www.javacoder.cloud)",
   "license": "ISC",
-
+   "bugs": {
+    "url": "https://github.com/darco2018/dummyrepo/issues"
+  },
+  "homepage": "www.javacoder.cloud",
 
   "dependencies": {
         "bootstrap": "4.2.1",
@@ -22,6 +25,9 @@
     },
 
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
@@ -32,8 +38,32 @@
     "main.css": "1.0.0",
     "normalize.css": "8.0.1"
   },
-  "bugs": {
-    "url": "https://github.com/darco2018/dummyrepo/issues"
+
+  "engines": {
+    "node": ">=6",
+    "npm": ">=3"
   },
-  "homepage": "https://github.com/darco2018/dummyrepo#readme"
+
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+
+  "h5bp-configs": {
+    "directories": {
+      "archive": "archive",
+      "dist": "dist",
+      "src": "src",
+      "test": "test"
+    }
+  },
+
+  "files": [
+    "LICENSE.txt",
+    "package.json",
+    "dist/",
+    "README.md"
+  ],
+
 }
