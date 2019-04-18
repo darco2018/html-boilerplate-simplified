@@ -12,6 +12,15 @@
   },
   "author": "Dariusz Ustrzycki <newsecond@outlook.com> (website)",
   "license": "ISC",
+
+
+  "dependencies": {
+        "bootstrap": "4.2.1",
+        "popper": "1.14.7",
+        "tether": "1.4.4",
+        "jquery": "3.3.1"
+    },
+
   "devDependencies": {
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
