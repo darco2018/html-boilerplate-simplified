@@ -1,22 +1,50 @@
 module.exports = {
-    env: {
-        browser: true,
-        es6: true,
-        jquery: true,
+    "extends": [
+      "airbnb",
+      "prettier",
+      "prettier/react"
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      // Can I remove these now?
+      "ecmaFeatures": {
+        "impliedStrict": true,
+        "classes": true
+      }
     },
-
-    extends: "airbnb-base",
-    globals: {
-        Atomics: "readonly",
-        SharedArrayBuffer: "readonly"
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true,
+      "jquery": true,
+      "mocha": true
     },
-    parserOptions: {
-        ecmaVersion: 2018,
-        sourceType: "module"
+    "rules": {
+      "no-debugger": 0,
+      "no-alert": 0,  
+      "no-console": 0,    
+      "prefer-template": 0,
+      "max-len": 0,
+      "padded-blocks": 0,
+      "no-trailing-spaces": 0,
+      "no-multiple-empty-lines": 0,    
+      "prettier/prettier": [
+        "error",
+        {
+          "trailingComma": "es5",
+          "singleQuote": false,
+          "printWidth": 80,
+          "insertPragma": true
+        }
+      ],
+      
     },
-    rules: {
-        indent: ["error", 2],
-        quotes: ["error", "double"],
-        semi: ["error", "always"]
-    }
-};
+    "plugins": [
+      "mocha",
+      "html",
+      "prettier",
+      "react-hooks"
+    ]
+  }
+  

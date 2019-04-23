@@ -1,0 +1,24 @@
+1. Compared with the original, I didnt include:
+      "sourceType": "module",
+      in eslintrc.js
+2. For Bootstrap, remove main.css & normalize.css
+3. Remove zzz-style-test.js & zzz-js-test.js from the root folder after making sure prettier and eslint are working
+
+
+NOTES ON FOLDERS:
+src/: This is where the original source files are located,
+before being compiled into fewer files to dist/, public/ or build/.
+
+dist/: the compiled code/library, also named public/ or build/ target/
+The files meant for production or public use are usually located here.
+A directory where files will be stored that can be directly used by others
+without the need to compile or minify the source code that is being reused.
+f you want to distribute a JavaScript library, it's advisable to put the plain (not minified) source code
+into a src (source) directory and the minified and obfuscated version into the dist (distributable) directoy,
+so others can grab the minified version right away without having to minify it themselves.
+
+lib/: external dependencies (when included directly).
+
+node_modules/: includes libraries and dependencies for JS packages, used by Npm.
+vendor/: includes libraries and dependencies for PHP packages, used by Composer.
+bin/: files that get added to your PATH when installed.
