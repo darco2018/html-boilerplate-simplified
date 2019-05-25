@@ -11,10 +11,10 @@ exports.copyRootFiles = ({ context, from, to, ignore }) => ({
         context,
         from,
         to,
-        ignore
-      }
-    ])
-  ]
+        ignore,
+      },
+    ]),
+  ],
 });
 
 //------------------------------------------------
@@ -22,22 +22,22 @@ const webpack = require("webpack");
 
 exports.keepVendorHashConsistent = () => ({
   plugins: [
-    new webpack.HashedModuleIdsPlugin() // vendor hash should stay consistent between builds
-  ]
+    new webpack.HashedModuleIdsPlugin(), // vendor hash should stay consistent between builds
+  ],
 });
 //------------------------------------------------
 
 const StyleLintPlugin = require("stylelint-webpack-plugin");
-
+// ?! @imports in files are not followed, meaning only the main file for each require/entry is linted.
 exports.stylelint = () => ({
   plugins: [
     new StyleLintPlugin({
-      files: "src/**/*.css",
-      failOnError: false,
+      files: ["src/**/*.css", "src/**/*.scss"],
+      failOnError: false, // true = stylelint error will break webpack build
       emitErrors: false, // reports errors as warnings
-      quiet: false
-    })
-  ]
+      quiet: false, // true = avoid error output to the console.
+    }),
+  ],
 });
 
 //------------------------------------------------
@@ -45,7 +45,7 @@ exports.stylelint = () => ({
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 exports.uglifyJS = () => ({
-  plugins: [new UglifyJsPlugin()]
+  plugins: [new UglifyJsPlugin()],
 });
 
 //------------------------------------------------
@@ -55,9 +55,9 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 exports.clean = dir => ({
   plugins: [
     new CleanWebpackPlugin(dir, {
-      verbose: true
-    })
-  ]
+      verbose: true,
+    }),
+  ],
 });
 
 //------------------------------------------------
@@ -71,11 +71,11 @@ exports.loadImages = ({ include, exclude, options } = {}) => ({
         exclude,
         use: {
           loader: "url-loader",
-          options
-        }
-      }
-    ]
-  }
+          options,
+        },
+      },
+    ],
+  },
 });
 
 //--------------------------------------------------
@@ -94,9 +94,9 @@ exports.nextGenerationCss = () => ({
       // determining the polyfills you need based on your targeted browsers
       // supports any standard browserslist configuration
       //  includes autoprefixer: {},
-      new PostcssPresetEnv()
-    ]
-  }
+      new PostcssPresetEnv(),
+    ],
+  },
 });
 
 // ------------------------------------
@@ -104,12 +104,14 @@ exports.nextGenerationCss = () => ({
 const PurifyCSSPlugin = require("purifycss-webpack");
 
 exports.purifyCSS = ({ paths, purifyOptions }) => ({
-  plugins: [new PurifyCSSPlugin({ paths, purifyOptions })] // unmaintained plugin
+  plugins: [new PurifyCSSPlugin({ paths, purifyOptions })], // unmaintained plugin
 });
 
 // ------------------------
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CSSNano = require("cssnano");
 
 exports.extractCSS = ({ include, exclude, use = [] }) => {
   // Output extracted CSS to a file
@@ -119,19 +121,29 @@ exports.extractCSS = ({ include, exclude, use = [] }) => {
     module: {
       rules: [
         {
-          test: /\.css$/,
+          test: /\.scss$/,
           include,
           exclude,
-          use: [MiniCssExtractPlugin.loader].concat(use) //  a CSS file per JS file
-        }
-      ]
+          use: [MiniCssExtractPlugin.loader].concat(use), //  a CSS file per JS file
+        },
+      ],
     },
     plugins: [
       new MiniCssExtractPlugin({
         filename: "css/[name].css", // styles/[name].css
-        chunkFilename: "[id].css"
-      })
-    ]
+        chunkFilename: "[id].css",
+      }),
+      // after adding OptimizeCssAssetsPlugin, source maps stopped appearing
+      new OptimizeCssAssetsPlugin({
+        assetNameRegExp: /\.css$/,
+        cssProcessor: CSSNano,
+        cssProcessorOptions: { sourcemap: true },
+        cssProcessorPluginOptions: {
+          preset: ["default", { discardComments: { removeAll: true } }],
+        },
+        canPrint: true,
+      }),
+    ],
   };
 };
 
@@ -149,8 +161,8 @@ exports.devServer = ({ host, port, contentBase } = {}) => ({
     port, // Defaults to 8080
     hot: true,
     open: true,
-    overlay: true
-  }
+    overlay: true,
+  },
 });
 
 // ------------------------------ START loaders -----------------------------
@@ -163,13 +175,17 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.scss$/,
         include,
         exclude,
-        use: ["style-loader", "css-loader"]
-      }
-    ]
-  }
+        use: [
+          "style-loader", // creates style nodes from JS strings
+          "css-loader", // translates CSS into CommonJS
+          "sass-loader", // compiles Sass to CSS, using Node Sass by default
+        ],
+      },
+    ],
+  },
 });
 
 exports.eslint = ({ include, exclude } = {}) => ({
@@ -181,13 +197,13 @@ exports.eslint = ({ include, exclude } = {}) => ({
         test: /\.js$/,
         include,
         exclude,
-        loader: "eslint-loader"
+        loader: "eslint-loader",
         // needs .eslintrc
         // as soon as config file appears VS starts finding JS errors & correcting them on save
         // they can be seen in PROBLEMS
-      }
-    ]
-  }
+      },
+    ],
+  },
 });
 
 exports.babel = include => ({
@@ -203,14 +219,14 @@ exports.babel = include => ({
           {
             loader: "babel-loader",
             options: {
-              presets: ["@babel/preset-env"] // abel-preset-env is valuable as it can choose which features to compile and which polyfills to enable based on your browser definition.
-            }
-          }
+              presets: ["@babel/preset-env"], // abel-preset-env is valuable as it can choose which features to compile and which polyfills to enable based on your browser definition.
+            },
+          },
           // Add more loaders here
-        ]
-      }
-    ]
-  }
+        ],
+      },
+    ],
+  },
 });
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -226,32 +242,24 @@ exports.loadHtml = ({ include, exclude } = {}) => ({
           {
             loader: "html-loader",
             options: {
-              minimize: true
-            }
-          }
-        ]
-      }
-    ]
+              minimize: true,
+            },
+          },
+        ],
+      },
+    ],
   },
 
   plugins: [
     new HtmlWebpackPlugin({
       //  by default will generate its own index.html file, even though we already have one in the dist/ folder.
-      title: "Indexowa",
+      title: "Color game",
       template: "./src/index.html",
       filename: `index.html`,
       inject: "body",
       chunks: ["index"],
-      showErrors: true
-      // will inject  script tag of pageOne in body of index.html :  <script type="text/javascript" src="bundle.js"></script>
+      showErrors: true,
+      // will inject  script tag of  in body of index.html :  <script type="text/javascript" src="bundle.js"></script>
     }),
-    new HtmlWebpackPlugin({
-      title: "Mainowa",
-      template: "./src/main.html",
-      filename: `main.html`, // can be skipped only for index.html
-      inject: "body",
-      chunks: ["main"],
-      showErrors: true
-    })
-  ]
+  ],
 });
