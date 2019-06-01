@@ -17,6 +17,26 @@ exports.copyRootFiles = ({ context, from, to, ignore }) => ({
   ],
 });
 
+exports.copyVendorJs = ({ context, from, to, ignore }) => ({
+  plugins: [
+    new CopyPlugin([
+      {
+        context,
+        from,
+        to,
+        ignore,
+      },
+    ]),
+  ],
+});
+//------------------------------------------------
+
+const DashboardPlugin = require("webpack-dashboard/plugin");
+
+exports.webpackDashboard = () => ({
+  plugins: [new DashboardPlugin()],
+});
+
 //------------------------------------------------
 const webpack = require("webpack");
 
@@ -33,19 +53,11 @@ exports.stylelint = () => ({
   plugins: [
     new StyleLintPlugin({
       files: ["src/**/*.css", "src/**/*.scss"],
-      failOnError: false, // true = stylelint error will break webpack build
+      failOnError: true, // true = stylelint error will break webpack build
       emitErrors: false, // reports errors as warnings
       quiet: false, // true = avoid error output to the console.
     }),
   ],
-});
-
-//------------------------------------------------
-
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-
-exports.uglifyJS = () => ({
-  plugins: [new UglifyJsPlugin()],
 });
 
 //------------------------------------------------
@@ -130,7 +142,7 @@ exports.extractCSS = ({ include, exclude, use = [] }) => {
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: "css/[name].css", // styles/[name].css
+        filename: "assets/css/[name].css", // styles/[name].css
         chunkFilename: "[id].css",
       }),
       // after adding OptimizeCssAssetsPlugin, source maps stopped appearing
@@ -213,7 +225,7 @@ exports.babel = include => ({
         // // **Conditions** to match files using RegExp, function.
         test: /\.m?js$/,
         include,
-        exclude: /(node_modules|some_other_dir)/,
+        exclude: /(node_modules|someOtherDir)/,
         // use: "babel-loader?presets[]=env"
         use: [
           {
@@ -257,7 +269,7 @@ exports.loadHtml = ({ include, exclude } = {}) => ({
       template: "./src/index.html",
       filename: `index.html`,
       inject: "body",
-      chunks: ["index"],
+      // chunks: ["modernizr", "index"],
       showErrors: true,
       // will inject  script tag of  in body of index.html :  <script type="text/javascript" src="bundle.js"></script>
     }),

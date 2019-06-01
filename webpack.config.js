@@ -18,7 +18,7 @@ const commonConfig = merge([
       index: "./src/js/index.js",
     },
     output: {
-      filename: path.join("js", "[name]-[hash].js"),
+      filename: path.join("assets/js", "[name]-[hash].js"),
       path: path.resolve(__dirname, PATHS.dist),
       // publicPath: PATHS.dist
     },
@@ -33,7 +33,7 @@ const commonConfig = merge([
           }
         }
       },
-      runtimeChunk: "single" //  create a single runtime bundle for all chunks:
+      runtimeChunk: "single" //  create a single runtime bundle for all chunks: 
       */
     },
   },
@@ -50,28 +50,41 @@ const productionConfig = merge([
   // prod only:
   parts.extractCSS({
     use: ["css-loader", parts.nextGenerationCss(), "sass-loader"], // if it works: pageOne.css should have only one keyframes
-  }),  
+  }),
   // In case you want to compress your images, use image-webpack-loader, svgo-loader (SVG specific), or imagemin-webpack-plugin. */
   parts.loadImages({
     options: {
       limit: 5000,
-      name: path.join("img", "[name].[ext]"),
+      name: path.join("assets/img", "[name].[ext]"),
     },
   }),
   parts.copyRootFiles({
     context: PATHS.app,
     from: "**/*",
     to: PATHS.dist,
-    ignore: ["css/*", "js/*", "img/*", "**/*.html", "private/*", "notes.txt"],
+    ignore: [
+      "css/*",
+      "js/**",
+      "img/*",
+      "**/*index.html",
+      "private/*",
+      "scripts/*",
+      "notes.txt",
+    ],
+  }),
+  parts.copyVendorJs({
+    context: PATHS.app,
+    from: "js/vendor",
+    to: "assets/js/vendor",
   }),
 ]);
 
-/* The loadImages() configuration defaults to url-loader during development and uses both url-loader and file-loader in production
-  to maintain smaller bundle sizes.
-  url-loader uses file-loader implicitly when limit is set,
+/* The loadImages() configuration defaults to url-loader during development and uses both url-loader and file-loader in production 
+  to maintain smaller bundle sizes. 
+  url-loader uses file-loader implicitly when limit is set, 
   file-loader outputs image files and returns paths to them instead of inlining.
-  Below the limit, it should inline the image while above it should emit a separate asset and a path to it.
-  The CSS lookup works because of css-loader. You can also try importing the image from JavaScript code and see what happens.
+  Below the limit, it should inline the image while above it should emit a separate asset and a path to it. 
+  The CSS lookup works because of css-loader. You can also try importing the image from JavaScript code and see what happens. 
   Be careful not to apply both loaders on images at the same time! */
 
 const developmentConfig = merge([
@@ -92,8 +105,3 @@ module.exports = mode => {
 
   return merge(commonConfig, developmentConfig, { mode });
 };
-
-// plugins: [new webpack.HotModuleReplacementPlugin()], haven't done it yet
-// Production mode enables all sorts of optimizations out of the box.
-// Including minification, scope hoisting, tree-shaking and more.
-// parts.uglifyJS() not necessary
