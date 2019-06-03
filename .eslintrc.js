@@ -2,8 +2,8 @@ module.exports = {
   "extends": [  "airbnb",
   "plugin:prettier/recommended",
   "prettier/react",
-  "plugin:import/errors", 
-  "plugin:import/warnings"],  
+  "plugin:import/errors",
+  "plugin:import/warnings"],
 
   "parserOptions": {
     // ecma 6 ( 2015 ) is the default
@@ -23,10 +23,11 @@ module.exports = {
     "mocha": true //  adds all of the Mocha testing global variables.
   },
   "rules": {
-    "no-debugger": 1, // 1 - "warn", 0 -"off" , 2 "error"
-    "no-alert": "warn",
-    "no-console": 1,
-    "no-plusplus": 0
+    "no-debugger": 0, // 1 - "warn", 0 -"off" , 2 "error"
+    "no-alert": 0,
+    "no-console": 0,
+    "no-plusplus": 0,
+    "no-unused-vars": 0
     /* "prefer-template": 0,
     "max-len": 0,
     "padded-blocks": 0,
