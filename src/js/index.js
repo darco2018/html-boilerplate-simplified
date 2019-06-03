@@ -1,6 +1,6 @@
-//j is lowercase: jQuery
+// j is lowercase: jQuery
 if (jQuery) {
-    $("body").append("<br>Jquery is loaded.");
+  $("body").append("<br>Jquery is loaded.");
 } else {
-    alert("Jquery is NOT loaded");
+  alert("Jquery is NOT loaded");
 }
