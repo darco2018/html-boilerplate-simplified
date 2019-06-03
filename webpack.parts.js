@@ -29,13 +29,7 @@ exports.copyVendorJs = ({ context, from, to, ignore }) => ({
     ]),
   ],
 });
-//------------------------------------------------
 
-const DashboardPlugin = require("webpack-dashboard/plugin");
-
-exports.webpackDashboard = () => ({
-  plugins: [new DashboardPlugin()],
-});
 
 //------------------------------------------------
 const webpack = require("webpack");
