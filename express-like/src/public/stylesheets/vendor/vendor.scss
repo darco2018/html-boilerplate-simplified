@@ -1,0 +1,10 @@
+@import "~bootstrap/scss/bootstrap";
+// must be vendor.SCCC >> you can't import .scss file to a .css file!
+
+.dupa p {
+  color: blue;
+}
+
+p {
+  color: blue;
+}
