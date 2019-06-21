@@ -27,7 +27,8 @@
     "lint": "eslint --fix src/",
     "watch": "webpack -d --watch  --display-error-details",
     "start": "webpack-dev-server  --config webpack.dev.js --open --display-error-details",
-    "build": "webpack --config webpack.prod.js --display-error-details"
+    "build": "webpack --config webpack.prod.js --display-error-details && npm run resolveUrlsInCss",
+    "resolveUrlsInCss": "node ./resolve-url.js  ./dist/public/stylesheets  main 'url(../'"
   },
   "dependencies": {
     "express": "^4.17.1",
