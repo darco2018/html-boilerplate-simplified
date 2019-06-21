@@ -2,6 +2,7 @@
 //------------------------------------------------
 const path = require("path");
 const StyleLintPlugin = require("stylelint-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const PATHS = {
   app: path.resolve(__dirname, "src"),
@@ -15,6 +16,21 @@ const webpackData = {
     main: "./src/app.js" // default:  "./src/index.js",
   },
   plugins: [
+    new CopyWebpackPlugin([
+      {
+        context: PATHS.app,
+        from: "**/*",
+        to: PATHS.dist,
+        ignore: [
+          "public/javascripts/**",
+          "public/stylesheets/**",
+          "public/images/**",
+          "public/fonts/**",
+          "index.html",
+          "app.js"
+        ]
+      }
+    ]),
     new StyleLintPlugin({
       files: "**/*.(css|scss)", // default
       failOnError: true, // true = stylelint error will break webpack build
@@ -28,7 +44,7 @@ const webpackData = {
         test: /\.html$/,
         use: ["html-loader"]
       },
-       {
+      {
         test: /\.(svg|woff|woff2|eot|ttf|otf)$/,
         use: [
           {
