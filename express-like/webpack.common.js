@@ -28,6 +28,17 @@ const webpackData = {
         test: /\.html$/,
         use: ["html-loader"]
       },
+       {
+        test: /\.(svg|woff|woff2|eot|ttf|otf)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "public/fonts/[name].[ext]"
+            }
+          }
+        ]
+      },
       {
         // pre - not modified by other loaders. Anyway, loaders work from bottom to top
         enforce: "pre",

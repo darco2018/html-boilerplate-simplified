@@ -47,6 +47,7 @@ module.exports = merge(common.webpackData, {
           "public/javascripts/**",
           "public/stylesheets/**",
           "public/images/**",
+          "public/fonts/**",
           "index.html",
           "app.js"
         ]
