@@ -31,11 +31,11 @@
     "resolveUrlsInCss": "node ./resolve-url.js  ./dist/public/stylesheets  main 'url(../'"
   },
   "dependencies": {
-    "express": "^4.17.1",
     "bootstrap": "^4.3.1",
+    "express": "^4.17.1",
     "jquery": "^3.4.1",
-    "popper.js": "^1.14.7",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.15",
+    "popper.js": "^1.14.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
